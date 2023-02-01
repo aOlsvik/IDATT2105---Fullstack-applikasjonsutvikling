@@ -1,0 +1,190 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+
+html {
+    background-image: url("images/beige-background.jpg");
+    background-size: cover;
+    
+}
+
+body {
+    padding-top: 10px;
+}
+
+.grid-item {
+    margin: 0;
+    padding: 0;
+    font-size: 25px;
+    background-color: lightgoldenrodyellow;
+    color: #222;
+}
+
+
+.grid-container {
+    font-family: Raleway;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-gap: 20px;
+    width:95%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+
+.menu {
+    grid-column: 1 / -1;
+}
+.navbar {
+    list-style-type: none;
+    display:flex;
+    margin:0;
+    padding: 0;
+}
+
+.navbar li {
+    width: 25%;
+    text-align: center;
+}
+
+.navbar a {
+    color: black;
+    align-self: center;
+    text-decoration: none;
+    display: block;
+    border:0;
+    width: 100%;
+    padding: 20px 0;
+    font-size: 40px;
+    background-color: rgb(224, 224, 195);
+    font-weight: bold;
+    font-family: Raleway;
+}
+.navbar a:hover {
+    background-color: lightgoldenrodyellow;
+}
+
+
+.header {
+    grid-column: 1 / -1;
+    background-color: lightgoldenrodyellow;
+    display: flex;
+    justify-content: center;
+}
+
+#header-logo {
+    align-self: center;
+    padding: 10px;
+}
+#header-title {
+    margin-left: 10px;
+    align-self: center;
+}
+.grid-item-3 {
+    grid-row: span 2;
+    background-image: url("images/dog.jpg");
+    background-size:cover; 
+    font-size: 50px;
+    font-weight: bold;
+    height: 500px;
+    width:100%;
+}
+.lorem-ipsum{ 
+    padding: 10px;
+}
+.lorem-ipsum-1 {
+    font-family: "Arial";
+    font-style: italic;
+    color:green;
+}
+
+.lorem-ipsum-2 {
+    grid-row: span 2;
+    color:coral;
+}
+.lorem-ipsum-3{
+    font-family: 'Courier New';
+    color:navy;
+    font-weight: bold;
+}
+
+.sidebar {
+    padding:0;
+    grid-row: span 3;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.adjust-number{
+    display: inline-flex;
+    flex-direction: row-reverse;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.adjust-number button {
+    border:0;
+    margin:0 10px;
+    background-color:#00ffff;
+    width: 50px;
+    height: 50px;
+
+}
+
+.adjust-number button:hover {
+    background-color: forestgreen;
+    color: white;
+}
+
+.toggle-picture{
+    display: flex;
+    flex-direction: column;
+    align-items: center ;
+}
+#toggle-image{
+    border:0;
+    background-color: forestgreen;
+    color: white;
+    height: 25px;
+    width: 150px;
+}
+#toggle-image:hover{
+    background-color: aqua;
+    color: black;
+}
+
+
+.sidebar ol{
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.sidebar li{
+
+    color: black;
+    list-style-position: inside;
+}
+#display-words{
+    background-color: forestgreen;
+    color:white;
+    border:0;
+    padding:20px;
+}
+
+#display-words:hover{
+    background-color: aqua;
+    color:black;
+    border:0;
+    padding:20px;
+}
+.footer {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    padding: 15px 10px;
+}
+
+
