@@ -41,7 +41,7 @@
       return {
         topRow: ['C', 'ANS', 'DEL'],
         operators: ['+', '-', '*', '/'],
-        numbers: ["1", "2", "3", "4","5","6","7","8","9"],
+        numbers: ["1", "2", "3", "4","5","6","7","8",'9'],
         bottomRow: ['0','.'],
         current: "0",
         operator: null,
