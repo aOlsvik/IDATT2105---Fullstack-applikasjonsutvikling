@@ -4,13 +4,16 @@
 
 <template>
     <div>
-        Here is contact form
+        Please give feedback on the calculator by filling out this form!
     </div>
     <ContactForm />
 </template>
 
 <style scoped>
     * {
-        font-size: 20px;
+        display: flex;
+        justify-content: center;
+        font-size: 30px;
+        margin-top: 25px;
     }
 </style>

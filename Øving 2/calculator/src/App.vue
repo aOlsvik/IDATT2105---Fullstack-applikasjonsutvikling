@@ -1,5 +1,6 @@
 <script setup>
   import { RouterLink, RouterView } from "vue-router";
+  
 </script>
 
 <template>
@@ -16,8 +17,10 @@
   </body>
 </template>
 
+
 <style scoped>
   body {
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -26,28 +29,33 @@
 }
   
   nav {
+    
     display: flex;
+    align-self: center;
     align-items: center;
     justify-content: center;
     background-color: #ddd;
-    width: 100%;
+    width: 70%;
     height: 80px;
+    border-radius: 25px 40px 40px 25px;
+    padding-left: 10px;
+    margin-top: 10px;
   }
   label{
-    float: left;
     font-size: 40px;
     margin-right: auto;
     margin-left: 1rem;
   } 
 
   ul {
-    float: right;
     display: flex;
     justify-content: center;
-    align-content: center;
     margin: 0;
-    padding: 0;
+    padding: 0 10px;
     height: 100%;
+    background-color: rgb(134, 153, 156);
+    border-radius: 40px;
+    
   }
 
   li {
@@ -58,6 +66,7 @@
     align-content: center;
     list-style: none;
     padding: 0 5px;
+    margin: 0 15px 0 15px
   }
 
   a {
@@ -66,13 +75,14 @@
     justify-content: center;
     align-items: center;
     text-decoration: none;
-    color: darkslategray;
+    color: whitesmoke;
     padding: 5px;
     border-radius: 5px;
   }
 
   a:hover, a:focus {
-    background-color: #eee;
+    background-color: #99cfe4;
+    color:black;
   }
 
 

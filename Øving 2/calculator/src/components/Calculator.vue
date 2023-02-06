@@ -132,9 +132,10 @@
 </script>
 
 <style scoped>
+
 body{
     align-items: center;
-    margin-top: 20px;
+    margin-top: 50px;
 }
 .grid-container{
   padding:10px;
