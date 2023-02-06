@@ -4,12 +4,12 @@
 
 <template>
   <body>
-    <nav>
+    <nav class="navbar">
       <label>Calculator App</label>
       <ul>
         <li><router-link to="/">Home</router-link></li>
         <li><router-link to="/calculator">Calculator</router-link></li>
-        <li><router-link to="/reviews">Reviews</router-link></li>
+        <li><router-link to="/contact">Contact</router-link></li>
       </ul>
     </nav>
     <RouterView />
@@ -17,58 +17,64 @@
 </template>
 
 <style scoped>
-  
-  nav {
+  body {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #ddd;
-  width: 100%;
-  height: 80px;
-}
-label{
-    font-size: 40px;
-    float: left;
-  } 
-
-ul {
-  display: flex;
+  flex-direction: column;
   margin: 0;
   padding: 0;
-  width: 50%;
-  height: 100%;
-
-}
-
-li {
-  flex-grow: 1;
-  display: flex;
-}
-
-a {
-  text-decoration: none;
-  color: darkslategray;
-  padding-left: 0;
-  font-size: 25px;
-  width: 100%;
-}
-
-a:hover {
-  background-color: #eee;
+  min-height: 500px;
 }
   
-  body {
-    width: 100%;
-    display:flex;
-    flex-direction: column;
-    align-content: center;
-  }
-  main {
+  nav {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    font-family: Lucida Console;
+    justify-content: center;
+    background-color: #ddd;
+    width: 100%;
+    height: 80px;
   }
+  label{
+    float: left;
+    font-size: 40px;
+    margin-right: auto;
+    margin-left: 1rem;
+  } 
+
+  ul {
+    float: right;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+
+  li {
+    flex-grow: 1;
+    flex-wrap: wrap;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    list-style: none;
+    padding: 0 5px;
+  }
+
+  a {
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+    color: darkslategray;
+    padding: 5px;
+    border-radius: 5px;
+  }
+
+  a:hover, a:focus {
+    background-color: #eee;
+  }
+
 
 </style>
 

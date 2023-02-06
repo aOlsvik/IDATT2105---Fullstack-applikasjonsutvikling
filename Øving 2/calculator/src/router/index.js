@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import CalculatorView from '../views/CalculatorView.vue'
 import HomeView from '../views/HomeView.vue'
-import ReviewView from '../views/ReviewView.vue'
+import ContactView from '../views/ContactView.vue'
 
 
 const router = createRouter({
@@ -18,9 +18,9 @@ const router = createRouter({
         component: CalculatorView
     },
     {
-        path: '/reviews',
-        name: 'reviews',
-        component: ReviewView
+        path: '/contact',
+        name: 'contact',
+        component: ContactView
     }
     ]})
 
