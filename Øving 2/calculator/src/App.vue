@@ -1,30 +1,64 @@
 <script setup>
   import { RouterLink, RouterView } from "vue-router";
-  import Calculator from './components/Calculator.vue'
 </script>
 
 <template>
   <body>
     <nav>
-      <router-link to="/">Home</router-link>
-      <router-link to="/calculator">Calculator</router-link>
-      <router-link to="/reviews">Reviews</router-link>
+      <label>Calculator App</label>
+      <ul>
+        <li><router-link to="/">Home</router-link></li>
+        <li><router-link to="/calculator">Calculator</router-link></li>
+        <li><router-link to="/reviews">Reviews</router-link></li>
+      </ul>
     </nav>
-    <header>
-    <h1>Calculator App</h1>
-    </header>
     <RouterView />
   </body>
-
 </template>
 
 <style scoped>
-  h1{
-    font-size:100px;
-    margin:0;
-    padding:10px 0;
-  }
+  
+  nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ddd;
+  width: 100%;
+  height: 80px;
+}
+label{
+    font-size: 40px;
+    float: left;
+  } 
+
+ul {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  width: 50%;
+  height: 100%;
+
+}
+
+li {
+  flex-grow: 1;
+  display: flex;
+}
+
+a {
+  text-decoration: none;
+  color: darkslategray;
+  padding-left: 0;
+  font-size: 25px;
+  width: 100%;
+}
+
+a:hover {
+  background-color: #eee;
+}
+  
   body {
+    width: 100%;
     display:flex;
     flex-direction: column;
     align-content: center;
@@ -35,6 +69,7 @@
     align-items: center;
     font-family: Lucida Console;
   }
+
 </style>
 
 
