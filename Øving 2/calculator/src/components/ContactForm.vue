@@ -7,33 +7,37 @@
         <form @submit.prevent="submitData()">
         <div class="name-input">
             <label for="name">Name: </label>
-            <div style="display:grid; width: 100%;">
-                <input type="text" id="name" v-model="formData.name" placeholder="Your name">
-                <div style="border-radius:20px; height:30px; width:30px; background-color: green; margin:0 auto; text-align: center; position:absolute; justify-self: flex-end; align-self: center;">
-                    <i style="color: white; lin">✓</i>
+            <div class="validInput">
+                <input type="text" id="name" v-model="formData.name" placeholder="Your name" @input="updateName">
+                <div v-if="this.validName">
+                    <i>✓</i>
                 </div>
             </div>
         </div>
         <div class="email-input">
             <label for="email">Email: </label>
-            <input type="email" id="email" v-model="formData.email" placeholder="Your email"> 
+            <div class="validInput">
+                <input type="email" id="email" v-model="formData.email" placeholder="Your email" @input="updateEmail"> 
+                <div v-if="this.isValidEmail">
+                    <i>✓</i>
+                </div>
+            </div>
         </div>
         <div class="message-input">
             <label for="message">Message: </label>
-            <textarea placeholder="Write your message here" id="message" v-model="formData.message"></textarea> 
-        </div>
-        <div class="submit">
-            <div class="card" v-if="this.submitted">
-                <div style="border-radius:50px; height:50px; width:50px; background: #F8FAF5; margin:0 auto;">
-                    <i class="checkmark">✓</i>
+            <div class="validInput">
+                <textarea placeholder="Write your message here" id="message" v-model="formData.message"></textarea> 
+                <div v-if="this.validMessage" style="margin-top: 5px; align-self: flex-start;">
+                    <i>✓</i>
                 </div>
-                <h1>Success</h1> 
             </div>
-            <div class="card" v-else-if="this.failed">
-                <div style="border-radius:50px; height:50px; width:50px; background: #F8FAF5; margin:0 auto;">
-                    <i style="color: red;" class="checkmark">X</i>
+        </div>
+        <div class="submit"  :class="{'failure' : failed }">
+            <div class="card" v-if="this.submitted">
+                <div>
+                    <i> {{ submitSign }}</i>
                 </div>
-                <h1 style="color:red">Failed</h1> 
+                <h1>{{ submitFeedback }}</h1> 
             </div>
             <button :disabled="!validForm" type="submit">Submit</button>
       </div>
@@ -52,13 +56,16 @@
                 },
                 response: "",
                 submitted: false,
-                failed: false
+                failed: false,
+                submitResponse: [["✓", "Success!"],["X", "Failed"]],
+                submitFeedback: "",
+                submitSign: ""
                 }
         },
         methods: {
             getData() {
-                this.$store.commit('SET_NAME',this.name)
-                this.$store.commit('SET_EMAIL',this.email)
+                this.$store.commit('SET_NAME',this.formData.name)
+                this.$store.commit('SET_EMAIL',this.formData.email)
             },
             submitData() {
                 if(!this.validForm) return
@@ -68,23 +75,32 @@
                 ).then(
                     this.formData.name = this.$store.state.name,
                     this.formData.email = this.$store.state.email,
+                    this.response = "Success",
+                    this.submitSign = this.submitResponse[0][0],
+                    this.submitFeedback = this.submitResponse[0][1],
                     setTimeout(()=>{
                         this.submitted = true
+                        this.failed = false
                         this.formData.message = ""
-                        this.response = "Success"
                         }, 100)
-                ).catch(error =>
+                ).catch(error =>{
                     this.failed = true,
                     this.response = error
+                }
                 )
                 console.log(this.response)
             },
+            updateName(event) {
+                this.$store.commit("SET_NAME", event.target.value);
+            },
+            updateEmail(event) {
+                this.$store.commit("SET_EMAIL", event.target.value);
+            }
             
         },
         computed: {
             validForm() {
-                if(this.formData.name!=="" && this.formData.email !=="" && this.formData.message !== "" && this.isValidEmail) return true;
-                return false
+                return this.validName && this.isValidEmail && this.validMessage
             },
             isValidEmail() {
                 const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -93,12 +109,21 @@
             created(){
                 this.inputs.name = this.$store.state.name;
                 this.inputs.email = this.$store.state.email;
+            },
+            validName(){
+                return this.formData.name.trim()!== ""
+            },
+            validMessage(){
+                return this.formData.message.trim()!== ""
             }
+        },
+        created(){
+            this.formData.name = this.$store.state.name;
+            this.formData.email = this.$store.state.email;
         }
     }
 </script>
 <style scoped>
-
     .submit{
         display: flex;
     }
@@ -107,7 +132,7 @@
         margin-left: auto;
     }
 
-        h1 {
+        .submit h1 {
           color: #88B04B;
           font-family: "Nunito Sans", "Helvetica Neue", sans-serif;
           font-weight: 900;
@@ -115,12 +140,18 @@
           width: fit-content;
           margin-left: 0.5rem;
         }
-    
-      i {
-        color: #9ABC66;
-        font-size: 25px;
-        line-height: 50px;
-        margin-right: 5px;
+
+        .submit i{
+            color: #9ABC66;
+            font-size: 25px;
+            line-height: 50px;
+            margin-right: 5px;
+        }
+      .failure i{
+        color:red;
+      }
+      .failure h1{
+        color:red;
       }
       .card {
         justify-self: flex-start;
@@ -184,6 +215,40 @@
     }
     input {
         height: 25px;
+    }
+    .validInput{
+        display:grid; 
+        width: 100%;
+    }
+
+    .validInput div {
+        display:grid; 
+        border-radius:20px; 
+        height:30px; 
+        width:30px; 
+        background-color: #9ABC66; 
+        position:absolute; 
+        justify-self: 
+        flex-end;
+        align-self: 
+        flex-start; 
+        margin-right: 5px;
+        align-self: center;
+    }
+    .validInput i {
+        color: white; 
+        font-size: 20px; 
+        justify-self: center;
+        margin-right: 3px;
+        margin-top: 1px;
+    }
+
+    .submit .card div{
+        border-radius:50px; 
+        height:50px; 
+        width:50px; 
+        background: #F8FAF5; 
+        margin:0 auto;
     }
 
 </style>
