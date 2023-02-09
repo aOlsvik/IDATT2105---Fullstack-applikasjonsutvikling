@@ -6,7 +6,7 @@
 
 <style scoped>
     h1{  
-        font-size: 200px;
+        font-size: 150px;
         font-weight: lighter;
     }
     .title {

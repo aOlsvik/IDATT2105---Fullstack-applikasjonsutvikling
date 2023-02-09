@@ -29,13 +29,12 @@
 }
   
   nav {
-    
     display: flex;
     align-self: center;
     align-items: center;
     justify-content: center;
     background-color: #ddd;
-    width: 70%;
+    min-width: 70%;
     height: 80px;
     border-radius: 25px 40px 40px 25px;
     padding-left: 10px;
