@@ -54,10 +54,8 @@
                     email: "",
                     message: ""
                 },
-                response: "",
                 submitted: false,
                 failed: false,
-                submitResponse: [["✓", "Success!"],["X", "Failed"]],
                 submitFeedback: "",
                 submitSign: ""
                 }
@@ -72,23 +70,28 @@
                 this.submitted = false
                 this.getData()
                 axios.post("http://localhost:3000/feedbacks", this.formData
-                ).then(
+                ).then(response => {
                     this.formData.name = this.$store.state.name,
                     this.formData.email = this.$store.state.email,
-                    this.response = "Success",
-                    this.submitSign = this.submitResponse[0][0],
-                    this.submitFeedback = this.submitResponse[0][1],
-                    setTimeout(()=>{
-                        this.submitted = true
-                        this.failed = false
-                        this.formData.message = ""
-                        }, 100)
-                ).catch(error =>{
+                    this.submitted = true,
+                    this.failed = false
+                    this.message = "",
+                    this.submitResponse
+                    setTimeout(() => {
+                       this.submitted = false 
+                    }, 3000) 
+                }).catch(error =>{
+                    this.submitted = true,
                     this.failed = true,
-                    this.response = error
+                    this.message = ""
+                    this.submitResponse
+                    setTimeout(() => {
+                       this.submitted = false 
+                    }, 3000) 
                 }
                 )
-                console.log(this.response)
+                
+                
             },
             updateName(event) {
                 this.$store.commit("SET_NAME", event.target.value);
@@ -115,6 +118,15 @@
             },
             validMessage(){
                 return this.formData.message.trim()!== ""
+            },
+            submitResponse() {
+                if(!this.failed){
+                    this.submitSign = "✓"
+                    this.submitFeedback = "Success!"
+                } else{
+                    this.submitSign = "X"
+                    this.submitFeedback = "Failed, try again"
+                }
             }
         },
         created(){
