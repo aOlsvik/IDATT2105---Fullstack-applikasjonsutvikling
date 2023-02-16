@@ -4,7 +4,7 @@
 
 <template>
     <body>
-        <form @submit.prevent="submitData()">
+        <form id="form" @submit.prevent="submitData()">
         <div class="name-input">
             <label for="name">Name: </label>
             <div class="validInput">
@@ -65,17 +65,17 @@
                 this.$store.commit('SET_NAME',this.formData.name)
                 this.$store.commit('SET_EMAIL',this.formData.email)
             },
-            submitData() {
+            async submitData() {
                 if(!this.validForm) return
                 this.submitted = false
                 this.getData()
-                axios.post("http://localhost:3000/feedbacks", this.formData
+                await axios.post("http://localhost:3000/feedbacks", this.formData
                 ).then(response => {
                     this.formData.name = this.$store.state.name,
                     this.formData.email = this.$store.state.email,
                     this.submitted = true,
                     this.failed = false
-                    this.message = "",
+                    this.formData.message = "",
                     this.submitResponse
                     setTimeout(() => {
                        this.submitted = false 

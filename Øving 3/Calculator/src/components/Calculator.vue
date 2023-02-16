@@ -6,7 +6,7 @@
     <body>
         <div class="grid-container">
         <div class="grid-item display">
-            <p>{{ current }}</p>
+            <p id="current">{{ current }}</p>
         </div>
         <div class="top-row">
             <button @click="functions(item)" class="grid-item" v-for="item in topRow">

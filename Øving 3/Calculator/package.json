@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "test": "vitest --dom",
     "coverage": "vitest run --coverage",
-    "test:e2e": "vue-cli-service test:e2e"
+    "start": "json-server --watch db.json"
   },
   "dependencies": {
     "core-js": "^3.8.3",
@@ -17,12 +17,15 @@
     "vuex": "^4.0.0"
   },
   "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vitest/coverage-c8": "^0.28.5",
     "@vue/cli-plugin-babel": "~5.0.0",
     "@vue/cli-plugin-e2e-cypress": "~5.0.0",
     "@vue/cli-plugin-router": "~5.0.0",
     "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/cli-service": "~5.0.0",
-    "cypress": "^9.7.0",
+    "@vue/test-utils": "^2.2.10",
+    "cypress": "^12.5.1",
     "happy-dom": "^8.2.6"
   }
 }
