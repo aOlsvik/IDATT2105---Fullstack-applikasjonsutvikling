@@ -33,7 +33,7 @@
             </button>
         </div>
     </div>
-    <History :calculations="calculations" v-if="notEmptyList" />
+    <History :calculations="calculations" v-if="notEmptyList" id="history"/>
     </body>
 </template>
 

@@ -35,11 +35,11 @@
         <div class="submit"  :class="{'failure' : failed }">
             <div class="card" v-if="this.submitted">
                 <div>
-                    <i> {{ submitSign }}</i>
+                    <i id="sign"> {{ submitSign }}</i>
                 </div>
-                <h1>{{ submitFeedback }}</h1> 
+                <h1 id="feedback">{{ submitFeedback }}</h1> 
             </div>
-            <button :disabled="!validForm" type="submit">Submit</button>
+            <button :disabled="!validForm" type="submit" id="submitButton" >Submit</button>
       </div>
     </form>
     </body>
@@ -65,28 +65,28 @@
                 this.$store.commit('SET_NAME',this.formData.name)
                 this.$store.commit('SET_EMAIL',this.formData.email)
             },
-            async submitData() {
+            submitData() {
                 if(!this.validForm) return
                 this.submitted = false
                 this.getData()
-                await axios.post("http://localhost:3000/feedbacks", this.formData
+                axios.post("http://localhost:3000/feedbacks", this.formData
                 ).then(response => {
                     this.formData.name = this.$store.state.name,
                     this.formData.email = this.$store.state.email,
                     this.submitted = true,
                     this.failed = false
-                    this.formData.message = "",
                     this.submitResponse
                     setTimeout(() => {
-                       this.submitted = false 
+                        this.formData.message = "",
+                        this.submitted = false 
                     }, 3000) 
                 }).catch(error =>{
                     this.submitted = true,
                     this.failed = true,
-                    this.message = ""
                     this.submitResponse
                     setTimeout(() => {
-                       this.submitted = false 
+                        this.formData.message = ""
+                        this.submitted = false 
                     }, 3000) 
                 }
                 )

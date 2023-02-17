@@ -3,22 +3,24 @@ import { mount } from '@vue/test-utils'
 import Calculator from '../Calculator.vue'
 
 describe('calculatorButtons', ()=>{
+  var wrapper = undefined
+  beforeEach(()=>{
+    wrapper = mount(Calculator)
+  })
+
   test('button-clicks',()=>{
-    const wrapper = mount(Calculator)
     const button = wrapper.find('.numbers button')
     button.trigger('click')
     expect(wrapper.emitted('click')).toBeTruthy()
   })
 
   test('append', ()=>{
-    const wrapper = mount(Calculator)
     const button = wrapper.find('.numbers button')
     button.trigger('click')
     expect(wrapper.vm.$data.current).toBe('1')
   })
 
   test('result', ()=>{
-    const wrapper = mount(Calculator)
     const operation = wrapper.find('.operators button')
     const button = wrapper.find('.numbers button')
     console.log(button.text)

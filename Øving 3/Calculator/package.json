@@ -7,7 +7,7 @@
     "build": "vue-cli-service build",
     "test": "vitest --dom",
     "coverage": "vitest run --coverage",
-    "start": "json-server --watch db.json"
+    "start": "json-server --watch db.json --port 3000"
   },
   "dependencies": {
     "core-js": "^3.8.3",

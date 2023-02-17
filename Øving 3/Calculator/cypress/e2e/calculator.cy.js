@@ -14,13 +14,19 @@ describe('Calculator Tests', () => {
     cy.get('#current').should('contain.text', '4')
   })
   it('history appears after calculation', ()=>{
-    cy.get('History').should('not.exist')
-    cy.get('#current')
+    cy.get('#history').should('not.exist')
     cy.get('button').contains('2').click()
     cy.get('button').contains('+').click()
     cy.get('button').contains('2').click()
     cy.get('button').contains('=').click()
-    cy.get('#current')
-    cy.contains('History')
+    cy.get('#history').should('exist')
   })
+  it('C button clears text', ()=>{
+    cy.get('#current').should('have.text', 0)
+    cy.get('button').contains('2').click()
+    cy.get('#current').should('have.text', 2)
+    cy.get('button').contains('C').click()
+    cy.get('#current').should('have.text', 0)
+  })
+  
   })
