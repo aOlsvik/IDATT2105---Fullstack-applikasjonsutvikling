@@ -3,8 +3,7 @@
 </script>
 
 <template>
-    <body>
-        <div class="grid-container">
+    <div class="grid-container">
         <div class="grid-item display">
             <p>{{ current }}</p>
         </div>
@@ -34,7 +33,6 @@
         </div>
     </div>
     <History :calculations="calculations" v-if="notEmptyList" />
-    </body>
 </template>
 
 <script>
@@ -132,12 +130,8 @@
 </script>
 
 <style scoped>
-
-body{
-    align-items: center;
-    margin-top: 50px;
-}
 .grid-container{
+  margin:0;
   padding:10px;
   display: grid;
   border: 2px black solid;
