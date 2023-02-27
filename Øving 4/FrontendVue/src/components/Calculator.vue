@@ -126,9 +126,34 @@
             } 
         },
         async kaSomHelst(){
-            this.testString = await(await(axios.get("http://localhost:8080/").catch(error => {
+            const calculation = {
+                equation: this.previous + this.operator + this.current
+            }
+            if(this.operator == "+") {
+                this.testString = await(await(axios.post("http://localhost:8080/plus", calculation).catch(error => {
                 console.log(error)
-            }))).data
+                }))).data
+            }
+            else if (this.operator == "-"){
+                this.testString = await(await(axios.post("http://localhost:8080/minus",calculation).catch(error => {
+                console.log(error)
+                }))).data
+            }  
+            else if (this.operator == "*"){
+                this.testString = await(await(axios.post("http://localhost:8080/multiplication",calculation).catch(error => {
+                console.log(error)
+                }))).data
+            } 
+            else if (this.operator == "/"){
+                this.testString = await(await(axios.post("http://localhost:8080/division",calculation).catch(error => {
+                console.log(error)
+                }))).data
+            } else{
+                this.testString = await(await(axios.get("http://localhost:8080/").catch(error => {
+                console.log(error)
+                }))).data
+            }
+            
         }
     },
     computed: {
