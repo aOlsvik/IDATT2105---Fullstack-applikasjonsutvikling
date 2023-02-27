@@ -126,7 +126,7 @@
             } 
         },
         async kaSomHelst(){
-            this.testString = await(await(axios.get("http://localhost:8080").catch(error => {
+            this.testString = await(await(axios.get("http://localhost:8080/").catch(error => {
                 console.log(error)
             }))).data
         }
