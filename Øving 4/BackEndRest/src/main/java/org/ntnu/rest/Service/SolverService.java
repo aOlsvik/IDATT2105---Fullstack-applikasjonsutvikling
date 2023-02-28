@@ -24,31 +24,30 @@ public class SolverService {
                 elements[1] = String.valueOf(c);
             }
             else{
-                return "Invalid calculation. " +
-                        "Please enter a calculation on the form:" +
-                        "1+1";
+                logger.error("Invalid calculation");
+                return null;
             }
         }
         elements[2] = s.toString();
-        int answer = 0;
+        double answer = 0;
         String operator="";
         switch (elements[1]) {
             case "+" -> {
                 operator = "+";
-                answer = Integer.parseInt(elements[0]) + Integer.parseInt(elements[2]);
+                answer = Double.parseDouble(elements[0]) + Double.parseDouble(elements[2]);
             }
             case "-" -> {
                 operator = "-";
-                answer = Integer.parseInt(elements[0]) - Integer.parseInt(elements[2]);
+                answer = Double.parseDouble(elements[0]) - Double.parseDouble(elements[2]);
             }
             case "*" -> {
                 operator = "*";
-                answer = Integer.parseInt(elements[0]) * Integer.parseInt(elements[2]);
+                answer = Double.parseDouble(elements[0]) * Double.parseDouble(elements[2]);
             }
             case "/" -> {
                 operator = "/";
                 if (elements[2].equals("0")) return "Cannot divide by zero";
-                answer = Integer.parseInt(elements[0]) / Integer.parseInt(elements[2]);
+                answer = Double.parseDouble(elements[0]) / Double.parseDouble(elements[2]);
             }
         }
         logger.info("Calculated equation with result of: " + answer);

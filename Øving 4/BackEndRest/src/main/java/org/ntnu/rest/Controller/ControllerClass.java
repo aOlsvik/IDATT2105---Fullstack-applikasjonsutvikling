@@ -23,25 +23,25 @@ public class ControllerClass {
 
     @PostMapping("/plus")
     public String plus(@RequestBody Equation equation){
-        System.out.println(equation.getEquation());
+        this.solver.solve(equation);
         return "plus";
     }
 
     @PostMapping("/minus")
     public String minus(@RequestBody Equation equation){
-        System.out.println(equation.getEquation());
+        this.solver.solve(equation);
         return "minus";
     }
 
     @PostMapping("/multiplication")
     public String multiplication(@RequestBody Equation equation){
-        System.out.println(equation.getEquation());
+        this.solver.solve(equation);
         return "multiplication";
     }
 
     @PostMapping("/division")
     public String division(@RequestBody Equation equation){
-        System.out.println(equation.getEquation());
+        this.solver.solve(equation);
         return "division";
     }
 
