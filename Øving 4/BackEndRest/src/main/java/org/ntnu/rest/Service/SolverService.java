@@ -11,46 +11,17 @@ public class SolverService {
 
     Logger logger = LoggerFactory.getLogger(SolverService.class);
 
-    public String solve(Equation equation){
+    public void solve(Equation equation){
         logger.info("Received calculation: " + equation.getEquation());
-        String[] elements = new String[3];
-        StringBuilder s=new StringBuilder();
-        for(char c : equation.getEquation().trim().toCharArray()){
-            if(Character.isDigit(c)){
-                s.append(c);
-            } else if (c == '/' || c == '*' || c == '+' || c == '-'){
-                elements[0] = s.toString();
-                s = new StringBuilder();
-                elements[1] = String.valueOf(c);
-            }
-            else{
-                logger.error("Invalid calculation");
-                return null;
+        switch (equation.getOperator()) {
+            case '+' -> equation.setAnswer(Double.parseDouble(equation.getNum1()) + Double.parseDouble(equation.getNum2()));
+            case '-' -> equation.setAnswer(Double.parseDouble(equation.getNum1()) - Double.parseDouble(equation.getNum2()));
+            case '*' -> equation.setAnswer(Double.parseDouble(equation.getNum1()) * Double.parseDouble(equation.getNum2()));
+            case '/' -> {
+                if (equation.getNum2().equals("0")) throw new ArithmeticException("Division by zero");
+                equation.setAnswer(Double.parseDouble(equation.getNum1()) / Double.parseDouble(equation.getNum2()));
             }
         }
-        elements[2] = s.toString();
-        double answer = 0;
-        String operator="";
-        switch (elements[1]) {
-            case "+" -> {
-                operator = "+";
-                answer = Double.parseDouble(elements[0]) + Double.parseDouble(elements[2]);
-            }
-            case "-" -> {
-                operator = "-";
-                answer = Double.parseDouble(elements[0]) - Double.parseDouble(elements[2]);
-            }
-            case "*" -> {
-                operator = "*";
-                answer = Double.parseDouble(elements[0]) * Double.parseDouble(elements[2]);
-            }
-            case "/" -> {
-                operator = "/";
-                if (elements[2].equals("0")) return "Cannot divide by zero";
-                answer = Double.parseDouble(elements[0]) / Double.parseDouble(elements[2]);
-            }
-        }
-        logger.info("Calculated equation with result of: " + answer);
-        return elements[0] + operator + elements[2] + "=" + answer;
+        logger.info("Calculated equation with result of: " + equation.getAnswer());
     }
 }

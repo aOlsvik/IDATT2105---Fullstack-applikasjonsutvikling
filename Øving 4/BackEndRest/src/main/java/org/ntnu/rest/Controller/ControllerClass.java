@@ -15,34 +15,44 @@ public class ControllerClass {
     @GetMapping("/")
     public String testConnection(){
         Equation e = new Equation();
-        e.setEquation("2+2");
-        System.out.println(this.solver.solve(e));
-        System.out.println("Success");
+        e.setNum1("2");
+        e.setOperator('+');
+        e.setNum2("2");
+        this.solver.solve(e);
+        System.out.println(e.getEquation() + "=" + e.getAnswer());
         return "Success";
     }
 
     @PostMapping("/plus")
-    public String plus(@RequestBody Equation equation){
+    @ResponseBody
+    public Equation plus(@RequestBody Equation equation){
+        equation.setOperator('+');
         this.solver.solve(equation);
-        return "plus";
+        return equation;
     }
 
     @PostMapping("/minus")
-    public String minus(@RequestBody Equation equation){
+    @ResponseBody
+    public Equation minus(@RequestBody Equation equation){
+        equation.setOperator('-');
         this.solver.solve(equation);
-        return "minus";
+        return equation;
     }
 
     @PostMapping("/multiplication")
-    public String multiplication(@RequestBody Equation equation){
+    @ResponseBody
+    public Equation multiplication(@RequestBody Equation equation){
+        equation.setOperator('*');
         this.solver.solve(equation);
-        return "multiplication";
+        return equation;
     }
 
     @PostMapping("/division")
-    public String division(@RequestBody Equation equation){
+    @ResponseBody
+    public Equation division(@RequestBody Equation equation){
+        equation.setOperator('/');
         this.solver.solve(equation);
-        return "division";
+        return equation;
     }
 
 }
