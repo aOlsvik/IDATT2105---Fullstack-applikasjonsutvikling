@@ -14,7 +14,7 @@
             </button>
         </div>
         <div class="operators">
-            <button @click="operate(item)" class="grid-item operator-button" v-for="item in operators">
+            <button @click="changeOperator(item)" class="grid-item operator-button" v-for="item in operators">
                 {{item}}
             </button>
             <button @click="calculate()" class="grid-item equals">
@@ -22,20 +22,16 @@
             </button>
         </div>
         <div class="numbers">
-            <button @click="append(item)" class="grid-item" v-for="item in numbers">
+            <button @click="appendSymbol(item)" class="grid-item" v-for="item in numbers">
                 {{item}}
             </button>
         </div>
         <div class="bottom-row">
             <div class="grid-item"></div>
-            <button @click="append(item)" class="grid-item" v-for="item in bottomRow">
+            <button @click="appendSymbol(item)" class="grid-item" v-for="item in bottomRow">
                 {{item}}
             </button>
         </div>
-    </div>
-    <div>
-        <button @click="kaSomHelst()">click me</button>
-        <p>{{ testString }}</p>
     </div>
     <History :calculations="calculations" v-if="notEmptyList" />
 </template>
@@ -53,12 +49,11 @@
         previous: "0",
         answer: "0",
         previousOperator: "",
-        calculations: [],
-        testString: ""
+        calculations: []
       }
     },
     methods: {
-        append(number){
+        appendSymbol(number){
             if(this.current == "0" && number!='.') this.current = ""
             if(!(this.current.includes('.') && number=='.') && number!=''){
                 if(!(number==='')){
@@ -66,52 +61,10 @@
                 }
             }  
         },
-        operate(operator){
+        changeOperator(operator){
             this.operator = operator;
             this.previous = this.current
             this.current = '0'
-        },
-        calculate(){
-            let first = this.previous
-            let opr = this.operator
-            let second = this.current
-            if(this.operator == '='){
-                first = this.current
-                opr = this.previousOperator 
-                second = this.previous
-                if(this.previousOperator == "+") {
-                    this.answer = (parseFloat(this.current) + parseFloat(this.previous)).toFixed(4)
-                }
-                else if (this.previousOperator == "-"){
-                    this.answer = (parseFloat(this.current) - parseFloat(this.previous)).toFixed(4)
-                }  
-                else if (this.previousOperator == "*"){
-                    this.answer = (parseFloat(this.current) * parseFloat(this.previous)).toFixed(4)
-                } 
-                else if (this.previousOperator == "/"){
-                    this.answer = (parseFloat(this.current) / parseFloat(this.previous)).toFixed(4)
-                } 
-                this.current = parseFloat(this.answer).toString()
-                this.calculations.push((first + opr + second + "=" + parseFloat(this.answer).toString()))
-            }else{
-                this.previousOperator=this.operator
-                if(this.operator == "+") {
-                    this.answer = (parseFloat(this.previous) + parseFloat(this.current)).toFixed(4)
-                }
-                else if (this.operator == "-"){
-                    this.answer = (parseFloat(this.previous) - parseFloat(this.current)).toFixed(4)
-                }  
-                else if (this.operator == "*"){
-                    this.answer = (parseFloat(this.previous) * parseFloat(this.current)).toFixed(4)
-                } 
-                else if (this.operator == "/"){
-                    this.answer = (parseFloat(this.previous) / parseFloat(this.current)).toFixed(4)
-                } 
-                this.previous = this.current
-                this.current = parseFloat(this.answer).toString()
-                this.calculations.push((first + opr + second + "=" + parseFloat(this.answer).toString()))
-                this.operator = '='
-            }
         },
         functions(func){
             if(func === "C"){
@@ -125,35 +78,57 @@
                 if(this.current.charAt(this.current.length-1) === '.') this.current = this.current.substring(0,this.current.length-1)
             } 
         },
-        async kaSomHelst(){
-            const calculation = {
-                equation: this.previous + this.operator + this.current
+        async calculate(){
+            let equation = {
+                num1: this.previous,
+                num2: this.current
             }
-            if(this.operator == "+") {
-                this.testString = await(await(axios.post("http://localhost:8080/plus", calculation).catch(error => {
-                console.log(error)
-                }))).data
+            let address = "http://localhost:8080/"
+            let opr = this.operator
+            if(this.operator == '='){
+                equation.num1 = this.current
+                opr = this.previousOperator
+                equation.num2 = this.previous
+            }else{
+                this.previousOperator=this.operator
             }
-            else if (this.operator == "-"){
-                this.testString = await(await(axios.post("http://localhost:8080/minus",calculation).catch(error => {
-                console.log(error)
-                }))).data
-            }  
-            else if (this.operator == "*"){
-                this.testString = await(await(axios.post("http://localhost:8080/multiplication",calculation).catch(error => {
-                console.log(error)
-                }))).data
-            } 
-            else if (this.operator == "/"){
-                this.testString = await(await(axios.post("http://localhost:8080/division",calculation).catch(error => {
-                console.log(error)
-                }))).data
-            } else{
-                this.testString = await(await(axios.get("http://localhost:8080/").catch(error => {
-                console.log(error)
-                }))).data
+
+            if(opr === "+") address+="plus"
+            else if (opr === "-") address+="minus"
+            else if (opr === "*") address+="multiplication"
+            else if (opr === "/") address+="division"
+            else if(this.operator == "="){
+                if(this.previousOperator === "+") address+="plus"
+                else if (this.previousOperator === "-") address+="minus"
+                else if (this.previousOperator === "*") address+="multiplication"
+                else if (this.previousOperator === "/") address+="division"
             }
             
+            const result = await(await(axios.post(address, equation).catch(error => {
+                console.log(error)
+                }))).data
+
+            this.update(result)
+        },
+        update(result){
+            if(this.operator !== "="){
+                this.operator = '='
+                this.previous = this.current
+            }            
+            
+            this.answer = result.answer.toFixed(4)
+            this.current = parseFloat(this.answer).toString()
+            
+
+            if(result.num1<0) {
+                result.num1 = "(" + result.num1 + ")"
+            } 
+            if(result.num2<0) {
+                result.num2 = "(" + result.num2 + ")"
+            } 
+            
+            
+            this.calculations.push((result.num1 + result.operator + result.num2 + "=" + this.current))
         }
     },
     computed: {

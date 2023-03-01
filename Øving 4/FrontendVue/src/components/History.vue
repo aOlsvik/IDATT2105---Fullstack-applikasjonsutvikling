@@ -2,7 +2,7 @@
     <main >
         <h2>History</h2>
         <div class = "history">
-        <p v-for="calculation in calculations.reverse()" class="calculation">
+        <p v-for="calculation in calculations" class="calculation">
             {{ calculation }}
         </p>
     </div>
