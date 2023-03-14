@@ -1,2 +1,8 @@
-package org.ntnu.rest.Repository;public interface UserRepository {
+package org.ntnu.rest.Repository;
+
+import org.ntnu.rest.Entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserRepository extends JpaRepository<User, String> {
+
 }

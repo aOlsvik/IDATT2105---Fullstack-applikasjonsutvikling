@@ -1,4 +1,4 @@
-package org.ntnu.rest.Entities;
+package org.ntnu.rest.Entity;
 
 import jakarta.persistence.*;
 
