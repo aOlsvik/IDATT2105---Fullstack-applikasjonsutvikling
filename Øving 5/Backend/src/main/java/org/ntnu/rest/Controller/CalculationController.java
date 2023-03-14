@@ -1,23 +1,28 @@
 package org.ntnu.rest.Controller;
 
 import org.ntnu.rest.Model.Equation;
+import org.ntnu.rest.Service.CalculationService;
 import org.ntnu.rest.Service.SolverService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 
 @RestController
 @CrossOrigin(origins = "*")
 public class CalculationController {
 
     @Autowired
-    private SolverService solver;
+    private SolverService solverService;
+    @Autowired
+    private CalculationService calculationService;
 
 
     @PostMapping("/plus")
     @ResponseBody
     public Equation plus(@RequestBody Equation equation){
         equation.setOperator('+');
-        this.solver.solve(equation);
+        this.solverService.solve(equation);
         return equation;
     }
 
@@ -25,7 +30,7 @@ public class CalculationController {
     @ResponseBody
     public Equation minus(@RequestBody Equation equation){
         equation.setOperator('-');
-        this.solver.solve(equation);
+        this.solverService.solve(equation);
         return equation;
     }
 
@@ -33,7 +38,7 @@ public class CalculationController {
     @ResponseBody
     public Equation multiplication(@RequestBody Equation equation){
         equation.setOperator('*');
-        this.solver.solve(equation);
+        this.solverService.solve(equation);
         return equation;
     }
 
@@ -41,8 +46,13 @@ public class CalculationController {
     @ResponseBody
     public Equation division(@RequestBody Equation equation){
         equation.setOperator('/');
-        this.solver.solve(equation);
+        this.solverService.solve(equation);
         return equation;
+    }
+
+    @GetMapping("/calculations/{username}")
+    public ArrayList<String> getCalculations(@PathVariable String username){
+        return calculationService.getCalculations(username);
     }
 
 }

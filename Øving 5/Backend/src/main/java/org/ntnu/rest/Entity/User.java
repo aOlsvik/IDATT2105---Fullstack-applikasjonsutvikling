@@ -2,6 +2,8 @@ package org.ntnu.rest.Entity;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -11,6 +13,8 @@ public class User {
 
     @Column(name = "password")
     private String password;
+
+    public User(){}
 
     public String getUsername() {
         return username;
@@ -28,4 +32,10 @@ public class User {
         this.password = password;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User user)) return false;
+        return getUsername().equals(user.getUsername());
+    }
 }

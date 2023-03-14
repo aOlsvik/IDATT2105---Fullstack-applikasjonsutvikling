@@ -1,9 +1,11 @@
 package org.ntnu.rest.Model;
 
+
 public class Equation {
     private String num1, num2;
     private char operator;
     private double answer;
+    private String username;
 
     public char getOperator() {
         return operator;
@@ -32,7 +34,7 @@ public class Equation {
     }
 
     public String getEquation(){
-        return getNum1() + getOperator() + getNum2();
+        return getNum1() + getOperator() + getNum2() + "=" + getAnswer();
     }
 
     public double getAnswer() {
@@ -41,5 +43,13 @@ public class Equation {
 
     public void setAnswer(double answer) {
         this.answer = answer;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

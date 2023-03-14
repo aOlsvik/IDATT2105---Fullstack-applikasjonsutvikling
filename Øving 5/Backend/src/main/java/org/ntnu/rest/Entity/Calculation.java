@@ -11,11 +11,13 @@ public class Calculation {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "username")
     private User user;
 
     @Column(name = "calculation")
     private String calculation;
+
+    public Calculation(){}
 
     public Long getId() {
         return id;
