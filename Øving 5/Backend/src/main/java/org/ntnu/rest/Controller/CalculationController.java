@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -50,9 +51,9 @@ public class CalculationController {
         return equation;
     }
 
-    @GetMapping("/calculations/{username}")
-    public ArrayList<String> getCalculations(@PathVariable String username){
-        return calculationService.getCalculations(username);
+    @GetMapping("/calculations/{username}/{pageNumber}")
+    public List<String> getCalculations(@PathVariable String username, @PathVariable int pageNumber){
+        return calculationService.getCalculations(username, pageNumber);
     }
 
 }

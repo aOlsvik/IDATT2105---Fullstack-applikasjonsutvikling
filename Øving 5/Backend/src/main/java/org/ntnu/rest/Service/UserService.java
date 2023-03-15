@@ -1,11 +1,13 @@
 package org.ntnu.rest.Service;
 
+import org.ntnu.rest.Entity.Calculation;
 import org.ntnu.rest.Entity.User;
 import org.ntnu.rest.Model.UserLogin;
 import org.ntnu.rest.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @Service
@@ -30,4 +32,5 @@ public class UserService {
         Optional<User> user = userRepository.findById(login.getUsername());
         return user.map(value -> value.getPassword().equals(login.getPassword())).orElse(false);
     }
+
 }

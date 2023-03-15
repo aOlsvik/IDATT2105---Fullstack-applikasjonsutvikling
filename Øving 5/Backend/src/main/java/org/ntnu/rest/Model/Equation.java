@@ -34,7 +34,11 @@ public class Equation {
     }
 
     public String getEquation(){
-        return getNum1() + getOperator() + getNum2() + "=" + getAnswer();
+        String eq = getNum1() + getOperator() + getNum2();
+        if(getAnswer()!=0.0){
+            eq+="=" + getAnswer();
+        }
+        return eq;
     }
 
     public double getAnswer() {
