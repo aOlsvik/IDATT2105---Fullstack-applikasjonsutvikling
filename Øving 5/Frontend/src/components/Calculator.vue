@@ -1,6 +1,8 @@
 <script setup>
     import History from './History.vue'
     import axios from 'axios'
+    
+    
 </script>
 
 <template>
@@ -33,11 +35,19 @@
             </button>
         </div>
     </div>
-    <History :calculations="calculations" v-if="notEmptyList" />
+    <History :pageNumber="pageNumber" :morePages="morePages" :calculations="calculations" v-if="notEmptyList" 
+        @historyclick="(calculation)=>display(calculation)"
+        @nextPage="nextPage()"
+        @prevPage="prevPage()"
+        @noMorePages="pageNumber=false"
+    />
 </template>
 
 <script>
   export default{
+    components:{
+        History
+    },
     data(){
       return {
         topRow: ['C', 'ANS', 'DEL'],
@@ -49,7 +59,9 @@
         previous: "0",
         answer: "0",
         previousOperator: "",
-        calculations: []
+        calculations: [],
+        pageNumber: 0,
+        morePages:true,
       }
     },
     methods: {
@@ -81,9 +93,11 @@
         async calculate(){
             let equation = {
                 num1: this.previous,
-                num2: this.current
+                num2: this.current,
+                username: this.$store.state.username
             }
             let address = "http://localhost:8080/"
+            //let address = "http://10.22.7.151:8080/"
             let opr = this.operator
             if(this.operator == '='){
                 equation.num1 = this.current
@@ -127,8 +141,47 @@
                 result.num2 = "(" + result.num2 + ")"
             } 
             
+            let calculation = (result.num1 + result.operator + result.num2 + "=" + this.current)
+            this.addCalculation(calculation)
             
-            this.calculations.push((result.num1 + result.operator + result.num2 + "=" + this.current))
+            
+        },
+        addCalculation(calculation){
+            this.calculations.unshift(calculation)
+            if(this.calculations.length>10) this.calculations.pop()
+
+        },
+        display(calculation){
+            let split = calculation.split('=')
+            console.log(split)
+            this.current = split[1]
+            this.answer = this.current
+        },
+        goToPage(){
+            let username = this.$store.state.username;
+            let path = "http://localhost:8080/calculations/"
+            //let path = "http://10.22.7.151:8080/calculations/"
+            path+=username+"/"+this.pageNumber
+            axios.get(path).then(response=>{
+                if(response.data.length!=0){
+                    this.morePages=true
+                    this.calculations = response.data
+
+                }else{
+                    this.pageNumber--
+                    this.morePages=false
+                }
+                
+            }).catch(error=>{
+                this.pageNumber--
+                console.error(error)
+            })
+        },
+        prevPage(){
+            this.goToPage(this.pageNumber--)
+        },
+        nextPage(){
+            this.goToPage(this.pageNumber++)
         }
     },
     computed: {
@@ -137,10 +190,24 @@
         }
     },
     mounted(){
-        const username = this.$store.state.username;
+        let username = this.$store.state.username;
         if (!username) {
           this.$router.push('/');
         }
+        let path = "http://localhost:8080/calculations/"
+        //let path = "http://10.22.7.151:8080/calculations/"
+        path+=username+"/0"
+
+        var user = {
+            username: this.username
+        }
+        
+
+        axios.get(path,user).then(response=>{
+            this.calculations = response.data
+        }).catch(error=>{
+            console.error(error)
+        })
     }
 
   }
