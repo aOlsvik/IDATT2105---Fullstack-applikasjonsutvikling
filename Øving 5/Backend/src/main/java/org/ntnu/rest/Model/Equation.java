@@ -41,6 +41,11 @@ public class Equation {
         return eq;
     }
 
+    public String getFullEqution(){
+        String eq = getNum1() + getOperator() + getNum2() + "=" + getAnswer();
+        return eq;
+    }
+
     public double getAnswer() {
         return answer;
     }

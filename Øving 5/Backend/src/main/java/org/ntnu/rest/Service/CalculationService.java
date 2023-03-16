@@ -26,8 +26,7 @@ public class CalculationService {
 
     public void save(Equation equation, User user) {
         Calculation calculation = new Calculation();
-        calculation.setCalculation(equation.getEquation());
-
+        calculation.setCalculation(equation.getFullEqution());
         calculation.setUser(user);
         this.calculationRepository.save(calculation);
     }
