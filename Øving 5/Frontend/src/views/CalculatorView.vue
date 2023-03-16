@@ -15,7 +15,7 @@ export default {
     methods: {
         logOut(){
             this.$router.push('/')
-            this.$store.commit('SET_USERNAME', '')
+            this.$store.dispatch('login')
         }
     }
 }

@@ -1,8 +1,9 @@
 <script setup>
     import History from './History.vue'
     import axios from 'axios'
-    
-    
+    import { store } from '../store/store'
+    import { mapActions } from "pinia"
+    import { mapState } from 'pinia'
 </script>
 
 <template>
@@ -94,10 +95,16 @@
             let equation = {
                 num1: this.previous,
                 num2: this.current,
-                username: this.$store.state.username
+                username: this.loggedInUser
             }
-            let address = "http://localhost:8080/"
-            //let address = "http://10.22.7.151:8080/"
+            const config = {
+                    headers: {
+                        "Content-type": "application/json",
+                        "Authorization" : "Bearer " + this.jwtToken
+                    },
+                };
+            //let address = "http://localhost:8080/"
+            let address = "http://10.22.7.151:8080/"
             let opr = this.operator
             if(this.operator == '='){
                 equation.num1 = this.current
@@ -118,10 +125,9 @@
                 else if (this.previousOperator === "/") address+="division"
             }
             
-            const result = await(await(axios.post(address, equation).catch(error => {
+            const result = await(await(axios.post(address, equation,config).catch(error => {
                 console.log(error)
                 }))).data
-
             this.update(result)
         },
         update(result){
@@ -131,8 +137,7 @@
             }            
             
             this.answer = result.answer.toFixed(4)
-            this.current = parseFloat(this.answer).toString()
-            
+            this.current = parseFloat(result.answer).toString()
 
             if(result.num1<0) {
                 result.num1 = "(" + result.num1 + ")"
@@ -143,30 +148,36 @@
             
             let calculation = (result.num1 + result.operator + result.num2 + "=" + this.current)
             this.addCalculation(calculation)
-            
-            
         },
         addCalculation(calculation){
+            this.pageNumber = 0
+            this.goToPage()
+            console.log(calculation)
             this.calculations.unshift(calculation)
             if(this.calculations.length>10) this.calculations.pop()
-
+            console.log(this.calculations)
         },
         display(calculation){
             let split = calculation.split('=')
-            console.log(split)
             this.current = split[1]
             this.answer = this.current
         },
         goToPage(){
-            let username = this.$store.state.username;
-            let path = "http://localhost:8080/calculations/"
-            //let path = "http://10.22.7.151:8080/calculations/"
+            let username = this.loggedInUser
+            //let path = "http://localhost:8080/calculations/"
+            let path = "http://10.22.7.151:8080/calculations/"
             path+=username+"/"+this.pageNumber
-            axios.get(path).then(response=>{
+            const config = {
+                    headers: {
+                        "Content-type": "application/json",
+                        "Authorization" : "Bearer " + this.jwtToken
+                    },
+                };
+
+            axios.get(path,config).then(response=>{
                 if(response.data.length!=0){
                     this.morePages=true
                     this.calculations = response.data
-
                 }else{
                     this.pageNumber--
                     this.morePages=false
@@ -185,27 +196,31 @@
         }
     },
     computed: {
+        ...mapState(store, ["loggedInUser", "jwtToken"]),
+
         notEmptyList() {
             return this.calculations.length !== 0
         }
     },
-    mounted(){
-        let username = this.$store.state.username;
+    async mounted(){
+        let username = this.loggedInUser;
         if (!username) {
           this.$router.push('/');
         }
-        let path = "http://localhost:8080/calculations/"
-        //let path = "http://10.22.7.151:8080/calculations/"
+        //let path = "http://localhost:8080/calculations/"
+        let path = "http://10.22.7.151:8080/calculations/"
         path+=username+"/0"
-
-        var user = {
-            username: this.username
-        }
+        const config = {
+          headers: {
+              "Content-type": "application/json",
+              "Authorization" : "Bearer " + this.jwtToken
+          },
+        };
         
-
-        axios.get(path,user).then(response=>{
+        await axios.get(path,config).then(response=>{
             this.calculations = response.data
         }).catch(error=>{
+            console.log("fail")
             console.error(error)
         })
     }

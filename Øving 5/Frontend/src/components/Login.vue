@@ -1,6 +1,10 @@
 <script setup>
     import axios from 'axios'
     import router from '../routes/router.js'
+    import { store } from '../store/store'
+    import { mapActions } from "pinia";
+    import { mapState } from "pinia"
+    
 </script>
 
 <template>
@@ -40,22 +44,33 @@
             }
         },
         methods: {
+            ...mapActions(store,["saveToken", "clearToken"]),
+
+
             async login() {
-                var path = "http://localhost:8080/"
-                //let path = "http://10.22.7.151:8080/"
+                //var path = "http://localhost:8080/"
+                let path = "http://10.22.7.151:8080/"
                 if(this.signUp){
                     path+="createUser"
                 }else{
-                    path+="login"
+                    path+="token"
                 }
                 var user = {
                     username: this.username,
                     password: this.password
                 }
-                axios.post(path,user).then(response=>{
-                    this.showError = false
-                    this.$store.commit('SET_USERNAME', this.username)
-                    router.push('/calculator')
+                const config = {
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                };
+                axios.post(path,user,config).then(response=>{
+                    let data = response.data;
+                    if(data != null && data != '' && data != undefined){
+                        this.showError = false
+                        this.saveToken(this.username, response.data)
+                        router.push('/calculator')
+                    }
                 }).catch(error=>{
                     console.error(error)
                     this.showError = true
@@ -71,10 +86,10 @@
                     this.header = "Login"
                     this.buttonGuide= "Click here to create a new account"
                 }
-            }
+        }
         },
         computed: {
-            
+            ...mapState(store,["loggedInUser", "jwtToken"]),
         }
     }
 </script>
