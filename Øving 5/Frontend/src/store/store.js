@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 export const store = defineStore("token", {
   state: () => ({
     jwtToken: null,
-    loggedInUser: "null",
+    loggedInUser: null,
   }),
 
   persist: {
@@ -17,8 +17,14 @@ export const store = defineStore("token", {
         this.jwtToken = token
     },
     clearToken(){
-        this.loggedInUser = null
         this.jwtToken = null
+        this.loggedInUser = null
     }
-  }
+  },
+  
+  getters: {
+    isLoggedIn: (state) => !!state.jwtToken,
+    getJWTToken: (state) => state.jwtToken,
+    getLoggedInUser: (state) => state.loggedInUser,
+  },
 });

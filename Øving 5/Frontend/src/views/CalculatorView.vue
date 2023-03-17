@@ -1,5 +1,7 @@
 <script setup>
     import Calculator from '../components/Calculator.vue'
+    import { store } from '../store/store'
+    import { mapActions } from 'pinia';
 </script>
 <template>
     <header>
@@ -13,9 +15,11 @@
 export default {
     name:'Calculator',
     methods: {
+        ...mapActions(store,["clearToken"]),
+
         logOut(){
+            this.clearToken()
             this.$router.push('/')
-            this.$store.dispatch('login')
         }
     }
 }

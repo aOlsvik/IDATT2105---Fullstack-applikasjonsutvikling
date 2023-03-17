@@ -2,7 +2,6 @@
     import History from './History.vue'
     import axios from 'axios'
     import { store } from '../store/store'
-    import { mapActions } from "pinia"
     import { mapState } from 'pinia'
 </script>
 
@@ -66,6 +65,7 @@
       }
     },
     methods: {
+
         appendSymbol(number){
             if(this.current == "0" && number!='.') this.current = ""
             if(!(this.current.includes('.') && number=='.') && number!=''){
@@ -126,7 +126,7 @@
             }
             
             const result = await(await(axios.post(address, equation,config).catch(error => {
-                console.log(error)
+                console.error(error)
                 }))).data
             this.update(result)
         },
@@ -152,10 +152,8 @@
         addCalculation(calculation){
             this.pageNumber = 0
             this.goToPage()
-            console.log(calculation)
             this.calculations.unshift(calculation)
             if(this.calculations.length>10) this.calculations.pop()
-            console.log(this.calculations)
         },
         display(calculation){
             let split = calculation.split('=')
@@ -204,25 +202,26 @@
     },
     async mounted(){
         let username = this.loggedInUser;
-        if (!username) {
+        if (username===null) {
           this.$router.push('/');
+        }else{
+            //let path = "http://localhost:8080/calculations/"
+            let path = "http://10.22.7.151:8080/calculations/"
+            path+=username+"/0"
+            const config = {
+              headers: {
+                  "Content-type": "application/json",
+                  "Authorization" : "Bearer " + this.jwtToken
+              },
+            };
+
+            await axios.get(path,config).then(response=>{
+                this.calculations = response.data
+            }).catch(error=>{
+                console.error(error)
+            })
         }
-        //let path = "http://localhost:8080/calculations/"
-        let path = "http://10.22.7.151:8080/calculations/"
-        path+=username+"/0"
-        const config = {
-          headers: {
-              "Content-type": "application/json",
-              "Authorization" : "Bearer " + this.jwtToken
-          },
-        };
         
-        await axios.get(path,config).then(response=>{
-            this.calculations = response.data
-        }).catch(error=>{
-            console.log("fail")
-            console.error(error)
-        })
     }
 
   }

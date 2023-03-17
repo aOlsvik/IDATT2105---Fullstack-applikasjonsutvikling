@@ -4,7 +4,6 @@
     import { store } from '../store/store'
     import { mapActions } from "pinia";
     import { mapState } from "pinia"
-    
 </script>
 
 <template>
@@ -44,8 +43,7 @@
             }
         },
         methods: {
-            ...mapActions(store,["saveToken", "clearToken"]),
-
+            ...mapActions(store,["saveToken"]),
 
             async login() {
                 //var path = "http://localhost:8080/"
@@ -64,12 +62,15 @@
                         "Content-type": "application/json",
                     },
                 };
-                axios.post(path,user,config).then(response=>{
+                await axios.post(path,user,config).then(response=>{
                     let data = response.data;
                     if(data != null && data != '' && data != undefined){
                         this.showError = false
-                        this.saveToken(this.username, response.data)
-                        router.push('/calculator')
+                        
+                        if(!this.signUp){
+                            this.saveToken(this.username, response.data)
+                            router.push('/calculator')
+                        }
                     }
                 }).catch(error=>{
                     console.error(error)
@@ -86,10 +87,40 @@
                     this.header = "Login"
                     this.buttonGuide= "Click here to create a new account"
                 }
-        }
+            },
+            refreshToken(){
+                let path = "http://10.22.7.151:8080/token"
+                var user = {
+                    username: this.username,
+                    password: this.password
+                }
+                const config = {
+                    headers: {
+                        "Content-type": "application/json",
+                    },
+                };
+                setInterval(async () => {
+                    console.log("refreshed token")
+                    await axios.post(path,user,config).then(response=>{
+                        let data = response.data;
+                        if(data != null && data != '' && data != undefined){
+                            this.saveToken(this.username, response.data)
+                        }
+                    }).catch(error=>{
+                        console.error(error)
+                    })
+                }, 1000 * 60 * 5)
+            }
         },
         computed: {
             ...mapState(store,["loggedInUser", "jwtToken"]),
+        },
+        watch: {
+            token(){
+                if(this.loggedInUser!==null){
+                    this.refreshToken()
+                }
+            }
         }
     }
 </script>

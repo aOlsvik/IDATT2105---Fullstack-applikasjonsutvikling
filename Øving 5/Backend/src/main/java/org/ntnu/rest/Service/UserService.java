@@ -4,6 +4,7 @@ import org.ntnu.rest.Entity.Calculation;
 import org.ntnu.rest.Entity.User;
 import org.ntnu.rest.Model.UserLogin;
 import org.ntnu.rest.Repository.UserRepository;
+import org.ntnu.rest.Security.PasswordUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class UserService {
     public boolean createUser(UserLogin login){
         User user = new User();
         user.setUsername(login.getUsername());
-        user.setPassword(login.getPassword());
+        user.setPassword(PasswordUtils.encode(login.getPassword()));
         if(userRepository.findById(user.getUsername()).isPresent()){
             return false;
         }
@@ -30,7 +31,7 @@ public class UserService {
 
     public boolean login(UserLogin login){
         Optional<User> user = userRepository.findById(login.getUsername());
-        return user.map(value -> value.getPassword().equals(login.getPassword())).orElse(false);
+        return user.map(value -> PasswordUtils.matches(login.getPassword(), value.getPassword())).orElse(false);
     }
 
 }
